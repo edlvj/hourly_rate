@@ -16,6 +16,7 @@ export default class LoginScreen extends Component<Props> {
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <ScrollView
         style={{ flex: 1 }}
@@ -23,7 +24,7 @@ export default class LoginScreen extends Component<Props> {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       >
-        <List renderHeader={() => 'Login'}>
+        <List renderHeader={() => 'Login to Jira'}>
           <InputItem
             clear
             error
@@ -31,14 +32,33 @@ export default class LoginScreen extends Component<Props> {
             value={this.state.email}
             onChange={(value: any) => {
               this.setState({
-                email,
+                email: value,
               });
             }}
             placeholder="test@test.com"
           >
             Email
           </InputItem>
-          <Button>Login</Button>
+          <InputItem
+            clear
+            type="password"
+            value={this.state.password}
+            onChange={(value: any) => {
+              this.setState({
+                password: value,
+              });
+            }}
+            placeholder="password"
+          >
+            Password
+          </InputItem>
+          <List.Item>
+            <Button 
+              onClick={() => {
+                navigate('Home')
+              }}
+              type="primary">Login</Button>
+          </List.Item>
         </List>
       </ScrollView>
     );
