@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import { Platform, Text, View, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import { Button, InputItem, List } from 'antd-mobile-rn';
+import { logIn } from '../actions/user';
 
-type Props = {};
+export default class LoginScreen extends Component {
 
-export default class LoginScreen extends Component<Props> {
-  inputRef: any;
-
-  constructor(props: any) {
+  constructor(props) {
     super(props);
     this.state = {
       email: '',
@@ -15,8 +13,51 @@ export default class LoginScreen extends Component<Props> {
     };
   }
 
+//   shouldComponentUpdate(nextProps, nextState) {
+//     let { navigate } = this.props.navigation;
+
+//     if (nextProps.logIn != this.props.logIn && nextProps.logIn === true) {
+//         navigate('Home')
+//         return false;
+//     }
+//     if (nextProps.status == 'error' || nextProps.status == 'done') {
+//         alert('Erorr')
+//         return false;
+//     }
+//     return true;
+// }
+
+  login = () => {
+    const { dispatch } = this.props;
+  
+    let errors = validateForm(this.state);
+    if(errors.length > 0) {
+      alert(errors.split());
+      return false;
+    }
+
+    const params = {
+      username: this.state.username,
+      password: this.state.password
+    };
+
+    alert(this.state.email);
+    //dispatch(logIn(params));
+  }
+
+  validateForm = (email, passe) => {
+    let errors = [];
+
+    if(typeof this.state.email === 'undefined') {
+      this.state.errors = 'Email can not be blank';
+    }
+
+    if(this.state.email.test(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)==0) {
+      this.state.valid = false;
+    }
+  }
+
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <ScrollView
         style={{ flex: 1 }}
@@ -27,15 +68,14 @@ export default class LoginScreen extends Component<Props> {
         <List renderHeader={() => 'Login to Jira'}>
           <InputItem
             clear
-            error
-            onErrorPress={() => alert('clicked me')}
+            type="email"
             value={this.state.email}
-            onChange={(value: any) => {
+            onChange={(value) => {
               this.setState({
                 email: value,
               });
             }}
-            placeholder="test@test.com"
+            placeholder="test@zapleo.com"
           >
             Email
           </InputItem>
@@ -43,7 +83,7 @@ export default class LoginScreen extends Component<Props> {
             clear
             type="password"
             value={this.state.password}
-            onChange={(value: any) => {
+            onChange={(value) => {
               this.setState({
                 password: value,
               });
@@ -55,7 +95,7 @@ export default class LoginScreen extends Component<Props> {
           <List.Item>
             <Button 
               onClick={() => {
-                navigate('Home')
+                this.login()
               }}
               type="primary">Login</Button>
           </List.Item>

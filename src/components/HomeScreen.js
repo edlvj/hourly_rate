@@ -1,13 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Text } from 'react-native';
-import { WingBlank, WhiteSpace, Button, Flex, List } from 'antd-mobile-rn';
+import { WhiteSpace, Button, Flex, List } from 'antd-mobile-rn';
 
-type Props = {};
+export default class HomeScreen extends Component {
 
-export default class HomeScreen extends Component<Props> {
-  inputRef: any;
-
-  constructor(props: any) {
+  constructor(props) {
     super(props);
     this.state = {
       daySalary: 0,
@@ -27,7 +24,7 @@ export default class HomeScreen extends Component<Props> {
                   textAlign: 'center'
                 }}
               >
-                Day Statisic:
+                Day Statistic:
               </Text>
             </Flex.Item>
           </Flex>
@@ -60,7 +57,9 @@ export default class HomeScreen extends Component<Props> {
           <WhiteSpace size="lg" />
           <Flex>  
             <Flex.Item>
-
+              <Button>
+                Reload
+              </Button>
             </Flex.Item>
           </Flex>
           <Flex>  
@@ -70,6 +69,13 @@ export default class HomeScreen extends Component<Props> {
                   navigate('Settings')
                 }} >
                 Go to Settings
+              </Button>
+            </Flex.Item>
+          </Flex>
+          <Flex>  
+            <Flex.Item>
+              <Button>
+                Log out
               </Button>
             </Flex.Item>
           </Flex>

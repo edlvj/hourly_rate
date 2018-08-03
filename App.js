@@ -1,17 +1,28 @@
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
 
-import HomeScreen from './src/components/HomeScreen';
-import LoginScreen from './src/components/LoginScreen';
-import SettingsScreen from './src/components/SettingsScreen';
+import configureStore from './src/store/index';
+import Router from './src/index';
 
-import { createStackNavigator } from 'react-navigation';
+let store = configureStore();
 
-const App = createStackNavigator({
-  Home: { screen: HomeScreen },
-  Login: { screen: LoginScreen },
-  Settings: { screen: SettingsScreen },
-}, {
-  initialRouteName: 'Login',
-  headerMode: 'none'
-});
-
-export default App;
+export default class App extends Component {
+    constructor() {
+      super();
+      this.state = {
+        isLoading: true,
+        store: configureStore(() => { this.setState({ isLoading: false }) })
+      }
+    }
+    render() {
+      if (this.state.isLoading) {
+        console.log('loading app');
+        return null;
+      }
+      return (
+        <Provider store={this.state.store}>
+          <Router />
+        </Provider>
+      );
+    }
+  }

@@ -1,13 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
 import { Button, List, InputItem } from 'antd-mobile-rn';
 
-type Props = {};
+export default class SettingsScreen extends Component {
 
-export default class SettingsScreen extends Component<Props> {
-  inputRef: any;
-
-  constructor(props: any) {
+  constructor(props) {
     super(props);
     this.state = {
       hourRate: '',
@@ -29,7 +26,7 @@ export default class SettingsScreen extends Component<Props> {
             clear
             error
             value={this.state.hourRate}
-            onChange={(value: any) => {
+            onChange={(value) => {
               this.setState({
                 hourRate: value,
               });
