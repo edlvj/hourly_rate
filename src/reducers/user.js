@@ -3,6 +3,7 @@ import * as TYPE from '../actions/user/types';
 const initialState = {
   loading: false,    
   user: {},
+  session: {},
   logIn: false
 }
 
@@ -16,19 +17,22 @@ export default function userReducer(state = initialState, action) {
       return Object.assign({}, state, {
         loading: false,
         logIn: true,
-        user: action.user,
+        session: action.session,
+        user: action.user
       })
     case TYPE.USER_LOGOUT:
       return Object.assign({}, state, {
         loading: false,
         logIn: false,
+        session: {},
         user: {}
       })
     case TYPE.USER_ERROR:
       return Object.assign({}, state, {
         loading: false,
         logIn: false,
-        user: {}
+        user: {},
+        session: {}
       })
     default:
       return state;

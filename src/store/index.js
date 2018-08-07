@@ -12,7 +12,7 @@ const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 function configureStore(onComplete: ? () => void) {
     const store = autoRehydrate()(createStoreWithMiddleware)(reducers);
     persistStore(store, {
-        storage: AsyncStorage
+      storage: AsyncStorage
     }, onComplete);
 
     return store;

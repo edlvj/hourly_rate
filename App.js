@@ -11,7 +11,9 @@ export default class App extends Component {
       super();
       this.state = {
         isLoading: true,
-        store: configureStore(() => { this.setState({ isLoading: false }) })
+        store: configureStore(() => { 
+          this.setState({ isLoading: false }) 
+        })
       }
     }
     render() {

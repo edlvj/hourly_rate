@@ -1,60 +1,86 @@
 import React, {Component} from 'react';
 import { ScrollView } from 'react-native';
 import { Button, InputItem, List } from 'antd-mobile-rn';
+import { connect } from 'react-redux';
 import { logIn } from '../actions/user';
 
-export default class LoginScreen extends Component {
+class LoginScreen extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      formErrors: {email: '', password: ''},
+      emailValid: false,
+      passwordValid: false
     };
   }
 
-//   shouldComponentUpdate(nextProps, nextState) {
-//     let { navigate } = this.props.navigation;
+  shouldComponentUpdate(nextProps, nextState) {
+    let { navigate } = this.props.navigation;
 
-//     if (nextProps.logIn != this.props.logIn && nextProps.logIn === true) {
-//         navigate('Home')
-//         return false;
-//     }
-//     if (nextProps.status == 'error' || nextProps.status == 'done') {
-//         alert('Erorr')
-//         return false;
-//     }
-//     return true;
-// }
+    console.log('shouldComponetUpdate');
+    console.log('login');
 
-  login = () => {
-    const { dispatch } = this.props;
-  
-    let errors = validateForm(this.state);
-    if(errors.length > 0) {
-      alert(errors.split());
+    if (nextProps.logIn != this.props.logIn && nextProps.logIn === true) {
+      navigate('Home')
       return false;
     }
+    if (nextProps.status == 'error' || nextProps.status == 'done') {
+      alert('Erorr')
+      return false;
+    }
+    return true;
+}
+
+  handleSubmit = () => {
+    const { dispatch } = this.props;
+    console.log(this.state.email);
+    console.log(this.state.password);
 
     const params = {
-      username: this.state.username,
+      username: this.state.email,
       password: this.state.password
     };
 
-    alert(this.state.email);
-    //dispatch(logIn(params));
+    dispatch(logIn(params));
   }
 
-  validateForm = (email, passe) => {
-    let errors = [];
-
-    if(typeof this.state.email === 'undefined') {
-      this.state.errors = 'Email can not be blank';
+  validateEmail = (value) => {
+    let formErrors = {email: ''};
+    
+    if(value.length === 0) {
+      formErrors['email'] = 'Email can not be blank';
     }
 
-    if(this.state.email.test(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)==0) {
-      this.state.valid = false;
+    if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value) !== true) {
+      formErrors['email'] = 'Wrong format of email';
     }
+
+    if(!formErrors['email']) {
+      this.setState({emailValid: true});
+    } else {
+      this.setState({emailValid: false});
+    }
+
+    this.setState({formErrors: formErrors});
+  }
+
+  validatePassword = (value) => {
+    let formErrors = {password: ''};
+
+    if(value.length === 0) {
+      formErrors['password'] = 'Password can not be blank';
+    }
+ 
+    if(!formErrors['password']) {
+      this.setState({passwordValid: true});
+    } else {
+      this.setState({passwordValid: false});
+    }
+
+    this.setState({formErrors: formErrors});
   }
 
   render() {
@@ -68,11 +94,18 @@ export default class LoginScreen extends Component {
         <List renderHeader={() => 'Login to Jira'}>
           <InputItem
             clear
+            error={this.state.formErrors['email'] ? true : false}
+            onErrorClick={() => 
+              alert(this.state.formErrors['email'])
+            }
             type="email"
             value={this.state.email}
             onChange={(value) => {
               this.setState({
                 email: value,
+              },
+              () => { 
+                this.validateEmail(value) 
               });
             }}
             placeholder="test@zapleo.com"
@@ -81,21 +114,28 @@ export default class LoginScreen extends Component {
           </InputItem>
           <InputItem
             clear
+            error={this.state.formErrors['password'] ? true : false}
+            onErrorClick={() => alert(this.state.formErrors['password'])}
             type="password"
             value={this.state.password}
             onChange={(value) => {
               this.setState({
                 password: value,
+              },
+              () => { 
+                this.validatePassword(value) 
               });
             }}
+            maxLength={24}
             placeholder="password"
           >
             Password
           </InputItem>
           <List.Item>
             <Button 
+              disabled={ this.state.emailValid && this.state.passwordValid ? false : true }
               onClick={() => {
-                this.login()
+                this.handleSubmit()
               }}
               type="primary">Login</Button>
           </List.Item>
@@ -104,3 +144,14 @@ export default class LoginScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  const userReducer = state.userReducer;
+  return {
+    logIn: userReducer.logIn,
+    user: userReducer.user,
+    loading: userReducer.loading
+  }
+}
+
+export default connect(mapStateToProps)(LoginScreen);
