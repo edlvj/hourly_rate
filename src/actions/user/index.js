@@ -1,17 +1,17 @@
-import { AsyncStorage } from "react-native";
+import { AsyncStorage } from 'react-native';
 import * as TYPE from './types';
+import { apiUrl } from '../../../config/index';
 
 export function logIn(opts) {
   return (dispatch) => {
     dispatch({
       'type': TYPE.USER_DO_LOGIN
     });
-
+    
+    console.log(apiUrl);
     console.log('send data', opts)
 
-    //https://zapleo.atlassian.net/rest/auth/1/session
-
-    fetch('http://d852959c.ngrok.io/rest/auth/1/session',
+    fetch(`${apiUrl}/rest/auth/1/session`,
       {
         method: 'POST',
         headers: {

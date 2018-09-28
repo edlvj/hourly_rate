@@ -1,4 +1,5 @@
 import * as TYPE from './types';
+import { apiUrl } from '../../../config/index';
 
 export function getWorklog(username, session) {
   return (dispatch) => {
@@ -16,8 +17,7 @@ export function getWorklog(username, session) {
     let uri = `worklogAuthor=#{email} AND statuscategory != done AND worklogDate >=#{ date } AND worklogDate <=#{ date }&fields=worklog`;
     console.log(uri);
 
-    // https://zapleo.atlassian.net/rest/api/2/search?jql=#{encodeURI(uri)}
-    fetch(`http://d852959c.ngrok.io/rest/api/2/search?jql=#{encodeURI(uri)`,
+    fetch(`${apiUrl}/rest/api/2/search?jql=#{encodeURI(uri)`,
     {
       headers: {
         'Content-Type': 'application/json',
